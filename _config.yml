@@ -1,8 +1,0 @@
-defaults:
-  -
-    scope:
-      path: ""
-      type: "files"
-    values:
-      layout: "default"
-      ext: ".html"
