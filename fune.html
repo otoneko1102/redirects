@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wave Animation with Pirate Ship</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #87CEEB;
+      margin: 0;
+    }
+    #canvasContainer {
+      position: relative;
+    }
+    canvas {
+      border: 1px solid #000;
+      display: block;
+    }
+    #ship {
+      position: absolute;
+      bottom: 1000px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+      z-index: -1;
+      transition: transform 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <div id="canvasContainer">
+    <canvas id="waveCanvas"></canvas>
+    <img id="ship" src="img/fune.png" alt="Pirate Ship">
+  </div>
+  <script>
+    const canvas = document.getElementById('waveCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+    let amplitude = 100;
+    let frequency = 0.01;
+    let offset = 0;
+
+    const ship = document.getElementById('ship');
+    const shipHeight = 190;
+
+    function drawWave() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = '#0000FF';
+      ctx.beginPath();
+      ctx.moveTo(0, height / 2);
+
+      for (let x = 0; x < width; x++) {
+        let y = height / 2 + amplitude * Math.sin((x * frequency) + offset);
+        ctx.lineTo(x, y);
+      }
+
+      ctx.lineTo(width, height);
+      ctx.lineTo(0, height);
+      ctx.closePath();
+      ctx.fill();
+
+      let y = height / 2 + amplitude * Math.sin(offset);
+      ship.style.top = (y - shipHeight) + 'px';
+
+      let angle = Math.sin(offset) * 30;
+      ship.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+    }
+
+    function animate() {
+      offset += 0.1;
+      drawWave();
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    animate();
+  </script>
+</body>
+</html>
